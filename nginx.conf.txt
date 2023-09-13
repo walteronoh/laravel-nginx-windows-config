@@ -1,0 +1,28 @@
+http {
+    server {
+        listen 80;
+        server_name yourdomain.com; # Replace with your domain name or IP address
+
+        root C:/path/to/your/laravel/public; # Use forward slashes in the path
+        index index.php;
+
+        location / {
+            try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ \.php$ {
+            fastcgi_pass 127.0.0.1:9000; # Use the appropriate PHP-FPM IP and port
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
+
+        location ~ /\.(?!well-known).* {
+            deny all;
+        }
+
+        location = /favicon.ico { access_log off; log_not_found off; }
+        location = /robots.txt  { access_log off; log_not_found off; }
+    
+        error_page 404 /index.php;
+    }
+}
